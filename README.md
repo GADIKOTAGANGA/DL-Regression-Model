@@ -7,7 +7,7 @@ To develop a neural network regression model for the given dataset.
 Regression problems involve predicting a continuous output variable based on input features. Traditional linear regression models often struggle with complex patterns in data. Neural networks, specifically feedforward neural networks, can capture these complex relationships by using multiple layers of neurons and activation functions. In this experiment, a neural network model is introduced with a single linear layer that learns the parameters weight and bias using gradient descent.
 
 ## Neural Network Model
-Include the neural network model diagram.
+<img width="962" height="995" alt="Screenshot 2026-10-27 143250" src="https://github.com/user-attachments/assets/e6f2f2c4-b0a0-4053-98f5-0695022840ae" />
 
 ## DESIGN STEPS
 ### STEP 1: Generate Dataset
@@ -40,32 +40,117 @@ Use the trained model to predict  for a new input value .
 
 ## PROGRAM
 
-### Name:
+### Name:G.GANGA DEVI
 
-### Register Number:
+### Register Number:212224240042
 
 ```python
 class Model(nn.Module):
     def __init__(self, in_features, out_features):
         super().__init__()
-        #Include your code here
+        import torch
+import torch.nn as nn
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+torch.manual_seed(71)
+X = torch.linspace(1, 50, 50).reshape(-1, 1)
+e = torch.randint(-8, 9, (50, 1), dtype=torch.float)
+y = 2 * X + 1 + e
+
+plt.scatter(X, y)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Generated Dataset')
+plt.show()
+
+class Model(nn.Module):
+    def __init__(self, in_features, out_features):
+        super().__init__()
+        self.linear = nn.Linear(in_features, out_features)
+
+    def forward(self, x):
+        return self.linear(x)
+
+torch.manual_seed(59)
+model = Model(1, 1)
+criterion = nn.MSELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
+
+epochs = 50
+losses = []
+
+for epoch in range(epochs):
+    y_pred = model(X)
+    loss = criterion(y_pred, y)
+
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    losses.append(loss.item())
+
+    print(f"Epoch {epoch+1}: Loss={loss.item():.4f}, "
+          f"Weight={model.linear.weight.item():.4f}, "
+          f"Bias={model.linear.bias.item():.4f}")
+
+plt.plot(range(1, epochs+1), losses)
+plt.xlabel('Epoch')
+plt.ylabel('MSE Loss')
+plt.title('Training Loss vs Epoch')
+plt.show()
+
+x_line = np.linspace(0, 50, 50)
+current_weight = model.linear.weight.item()
+current_bias = model.linear.bias.item()
+y_line = current_weight * x_line + current_bias
+
+plt.scatter(X, y, label='Original Data')
+plt.plot(x_line, y_line, 'r', label='Best Fit Line')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.show()
+
+new_input = torch.tensor([[60.0]])
+prediction = model(new_input)
+
+print("\nSample Input:", new_input.item())
+print("Predicted Output:", prediction.item())
 
 
 
 # Initialize the Model, Loss Function, and Optimizer
 
-```
+torch.manual_seed(59)
+model = Model(1, 1)
+criterion = nn.MSELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
 
+```
 ### Dataset Information
-Include screenshot of the generated data
+
+<img width="2170" height="725" alt="Python Notebook Output_ Model Weights and Details" src="https://github.com/user-attachments/assets/e9bbeb29-2c91-4921-aabd-de5b2d10c037" />
+
 
 ### OUTPUT
 Training Loss Vs Iteration Plot
+
+<img width="760" height="591" alt="image" src="https://github.com/user-attachments/assets/ef2a31e0-a2ac-4a47-a8c8-08968cbebc8b" />
+
 Best Fit line plot
+
+<img width="767" height="590" alt="image" src="https://github.com/user-attachments/assets/1c66462b-7229-4caf-a536-0ccde14094b6" />
+
 Include your plot here
 
-### New Sample Data Prediction
-Include your sample input and output here
+<img width="758" height="615" alt="image" src="https://github.com/user-attachments/assets/12e824b7-8799-4319-b3e6-6ab9afa32cfd" />
 
-## RESULT
-Thus, a neural network regression model was successfully developed and trained using PyTorch.
+### New Sample Data Prediction
+
+<img width="2170" height="725" alt="Python Notebook Output_ Model Weights and Details" src="https://github.com/user-attachments/assets/7f6241f6-eaaa-4b64-ab7b-cb3c27853b9f" />
+
+
+
+
